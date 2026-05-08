@@ -32,46 +32,48 @@ function isOpenAuthApi(pathname: string) {
 }
 
 function stripBasePath(pathname: string) {
-  let current = pathname || "/";
-
-  while (current === BASE_PATH || current.startsWith(`${BASE_PATH}/`)) {
-    current = current === BASE_PATH ? "/" : current.slice(BASE_PATH.length) || "/";
+  if (pathname === BASE_PATH) return "/";
+  if (pathname.startsWith(`${BASE_PATH}/`)) {
+    const stripped = pathname.slice(BASE_PATH.length);
+    return stripped || "/";
   }
-
-  return current;
+  return pathname;
 }
 
 function toPublicPath(pathname: string) {
-  const internalPath = stripBasePath(pathname);
+  const normalized = pathname.startsWith("/") ? pathname : `/${pathname}`;
 
-  if (internalPath === "/") return BASE_PATH;
-  return `${BASE_PATH}${internalPath.startsWith("/") ? "" : "/"}${internalPath}`;
+  if (normalized === "/") return BASE_PATH;
+  if (normalized === BASE_PATH || normalized.startsWith(`${BASE_PATH}/`)) {
+    return normalized;
+  }
+
+  return `${BASE_PATH}${normalized}`;
 }
 
 function redirectTo(request: NextRequest, pathname: string) {
-  return NextResponse.redirect(new URL(toPublicPath(pathname), request.url), 307);
+  return NextResponse.redirect(
+    new URL(toPublicPath(pathname), request.nextUrl.origin),
+    307
+  );
 }
 
 function loginRedirect(request: NextRequest, requestPath: string) {
-  const nextPath = stripBasePath(`${requestPath}${request.nextUrl.search}`);
+  const nextPath = stripBasePath(requestPath);
+  const url = new URL(toPublicPath("/login"), request.nextUrl.origin);
 
-  return NextResponse.redirect(
-    new URL(
-      `${toPublicPath("/login")}?next=${encodeURIComponent(nextPath)}`,
-      request.url,
-    ),
-    307,
-  );
+  // Avoid next=/ on the root path
+  if (nextPath !== "/") {
+    url.searchParams.set("next", `${nextPath}${request.nextUrl.search}`);
+  }
+
+  return NextResponse.redirect(url, 307);
 }
 
 function unauthorizedRedirect(request: NextRequest, requestPath: string) {
-  return NextResponse.redirect(
-    new URL(
-      `${toPublicPath("/unauthorized")}?from=${encodeURIComponent(requestPath)}`,
-      request.url,
-    ),
-    307,
-  );
+  const url = new URL(toPublicPath("/unauthorized"), request.nextUrl.origin);
+  url.searchParams.set("from", requestPath);
+  return NextResponse.redirect(url, 307);
 }
 
 export async function proxy(request: NextRequest) {
@@ -108,14 +110,14 @@ export async function proxy(request: NextRequest) {
     if (!isAuthenticated) {
       return NextResponse.json(
         { error: { message: "Authentication required" } },
-        { status: 401 },
+        { status: 401 }
       );
     }
 
     if (!canAccessApiPath(requestPath, claims)) {
       return NextResponse.json(
         { error: { message: "Insufficient permissions" } },
-        { status: 403 },
+        { status: 403 }
       );
     }
 
