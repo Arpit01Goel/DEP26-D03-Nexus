@@ -21,6 +21,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import { apiFetch } from "@/lib/api-client";
 
 type OverviewResponse = {
   totals: {
@@ -179,7 +180,7 @@ const ACADEMIC_YEAR_OPTIONS = buildAcademicYearOptions();
 const DEFAULT_ACADEMIC_YEAR = ACADEMIC_YEAR_OPTIONS[0] ?? "";
 
 async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(url, {
+  const response = await apiFetch(url, {
     credentials: "include",
     ...init,
   });
@@ -636,7 +637,7 @@ export default function AdminDashboardClient() {
     setError(null);
 
     try {
-      const response = await fetch(`/api/v1/admin/reports/export?type=${type}`, {
+      const response = await apiFetch(`/api/v1/admin/reports/export?type=${type}`, {
         credentials: "include",
       });
 

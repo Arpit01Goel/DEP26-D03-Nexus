@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { OrbitIcon, Eye, EyeOff, Loader2, AlertCircle, Mail, CheckCircle2 } from "lucide-react";
+import { apiFetch } from "@/lib/api-client";
 
 const STEPS = ["email", "otp", "password"] as const;
 type Step = (typeof STEPS)[number];
@@ -29,7 +30,7 @@ export default function ForgotPasswordPage() {
         setApiError(null);
 
         try {
-            const res = await fetch("/api/v1/auth/forgot-password/request-otp", {
+            const res = await apiFetch("/api/v1/auth/forgot-password/request-otp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
@@ -68,7 +69,7 @@ export default function ForgotPasswordPage() {
         setApiError(null);
 
         try {
-            const res = await fetch("/api/v1/auth/forgot-password/reset", {
+            const res = await apiFetch("/api/v1/auth/forgot-password/reset", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, otp, newPassword }),

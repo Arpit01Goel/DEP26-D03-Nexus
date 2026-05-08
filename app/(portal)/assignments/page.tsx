@@ -18,6 +18,7 @@ import Modal from "@/components/ui/Modal";
 import FilterSelect from "@/components/ui/FilterSelect";
 import EmptyState from "@/components/ui/EmptyState";
 import SearchBar from "@/components/ui/SearchBar";
+import { apiFetch } from "@/lib/api-client";
 
 type Coordinator = {
   id: string;
@@ -130,7 +131,7 @@ function areSetsEqual<T>(left: Set<T>, right: Set<T>) {
 }
 
 async function requestApi<T>(url: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(url, {
+  const response = await apiFetch(url, {
     ...init,
     cache: "no-store",
     headers: {

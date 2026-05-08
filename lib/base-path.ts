@@ -1,8 +1,7 @@
-const DEFAULT_PROD_BASE_PATH = "/cdpc-nexus";
+const DEFAULT_BASE_PATH = "/cdpc-nexus";
 
 export const BASE_PATH =
-  process.env.NEXT_PUBLIC_BASE_PATH ??
-  (process.env.NODE_ENV === "production" ? DEFAULT_PROD_BASE_PATH : "");
+  process.env.NEXT_PUBLIC_BASE_PATH ?? DEFAULT_BASE_PATH;
 
 export function addBasePath(path: string): string {
   if (!BASE_PATH) return path;

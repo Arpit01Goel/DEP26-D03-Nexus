@@ -1,6 +1,7 @@
 ﻿import Shell from "@/components/layout/Shell";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/api/auth";
+import { addBasePath } from "@/lib/base-path";
 
 export default async function PortalLayout({
   children,
@@ -10,7 +11,7 @@ export default async function PortalLayout({
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(addBasePath("/login"));
   }
 
   return <Shell currentUser={user}>{children}</Shell>;

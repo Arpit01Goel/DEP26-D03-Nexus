@@ -7,6 +7,7 @@ import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
 import SearchBar from "@/components/ui/SearchBar";
 import StatusBadge from "@/components/ui/StatusBadge";
+import { apiFetch } from "@/lib/api-client";
 import DrivesLoadingView from "./DrivesLoadingView";
 
 type CycleStatus = "not_contacted" | "contacted" | "positive" | "accepted" | "rejected";
@@ -60,7 +61,7 @@ type CompanyDetail = {
 };
 
 async function requestJson<T>(url: string) {
-  const response = await fetch(url, { credentials: "include" });
+  const response = await apiFetch(url, { credentials: "include" });
   const text = await response.text();
   let body: ApiResponse<T> = {};
   if (text) {

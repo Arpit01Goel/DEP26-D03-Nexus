@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Bell, Mail, BookOpen, Building2 } from "lucide-react";
+import { apiFetch } from "@/lib/api-client";
 
 type NotificationSummary = {
   pendingMails: number;
@@ -28,7 +29,7 @@ export default function NotificationWidget() {
   // ── Fetch badge count only — no mark-viewed. Used on mount so bell indicator shows.
   const fetchBadgeCount = useCallback(async () => {
     try {
-      const res = await fetch("/api/v1/notifications/summary");
+      const res = await apiFetch("/api/v1/notifications/summary");
       if (res.ok) {
         const data = await res.json();
         const s: NotificationSummary = data.data;
@@ -43,12 +44,12 @@ export default function NotificationWidget() {
   const fetchSummaryAndMarkViewed = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/v1/notifications/summary");
+      const res = await apiFetch("/api/v1/notifications/summary");
       if (res.ok) {
         const data = await res.json();
         setSummary(data.data);
         // Persist the "viewed" timestamp so future fetches don't repeat these items
-        await fetch("/api/v1/notifications/mark-viewed", { method: "POST" }).catch(
+        await apiFetch("/api/v1/notifications/mark-viewed", { method: "POST" }).catch(
           () => console.error("Failed to mark notifications as viewed")
         );
         // Clear badge — user has now seen the notifications

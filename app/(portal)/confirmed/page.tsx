@@ -37,6 +37,8 @@ import MailAttachmentInput, {
 import Modal from "@/components/ui/Modal";
 import RichTextEditor from "@/components/ui/RichTextEditor";
 import SearchBar from "@/components/ui/SearchBar";
+import { apiFetch } from "@/lib/api-client";
+import { addBasePath } from "@/lib/base-path";
 
 type ApiResponse<T> = {
   data?: T;
@@ -345,7 +347,7 @@ async function copyToClipboard(text: string) {
 }
 
 async function requestJson<T>(url: string, init?: RequestInit) {
-  const response = await fetch(url, { credentials: "include", ...init });
+  const response = await apiFetch(url, { credentials: "include", ...init });
   const text = await response.text();
   let body: ApiResponse<T> = {};
 
@@ -359,7 +361,7 @@ async function requestJson<T>(url: string, init?: RequestInit) {
 
   if (!response.ok) {
     if (response.status === 401 && typeof window !== "undefined") {
-      window.location.href = "/login";
+      window.location.href = addBasePath("/login");
     }
     throw new Error(body.error?.message ?? "Request failed");
   }
@@ -1627,7 +1629,7 @@ export default function ConfirmedPage() {
 
   async function downloadCompanyUploadTemplate() {
     try {
-      const response = await fetch("/api/v1/confirmed/company-upload-template", {
+      const response = await apiFetch("/api/v1/confirmed/company-upload-template", {
         credentials: "include",
       });
 

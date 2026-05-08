@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/api/auth";
 import { canAccessAppPath } from "@/lib/auth/rbac";
+import { addBasePath } from "@/lib/base-path";
 
 export default async function MailingLayout({
   children,
@@ -10,11 +11,11 @@ export default async function MailingLayout({
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(addBasePath("/login"));
   }
 
   if (!canAccessAppPath("/mailing", user)) {
-    redirect("/unauthorized?from=/mailing");
+    redirect(addBasePath("/unauthorized?from=/mailing"));
   }
 
   return <>{children}</>;

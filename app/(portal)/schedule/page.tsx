@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import EmptyState from "@/components/ui/EmptyState";
+import { apiFetch } from "@/lib/api-client";
+import { addBasePath } from "@/lib/base-path";
 import {
   Building2,
   CalendarClock,
@@ -256,7 +258,7 @@ function statusText(status: ScheduleItem["status"]) {
 }
 
 async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(url, {
+  const response = await apiFetch(url, {
     credentials: "include",
     ...init,
   });
@@ -274,7 +276,7 @@ async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
 
   if (!response.ok) {
     if (response.status === 401 && typeof window !== "undefined") {
-      window.location.href = "/login";
+      window.location.href = addBasePath("/login");
     }
     throw new Error(body.error?.message ?? "Request failed");
   }

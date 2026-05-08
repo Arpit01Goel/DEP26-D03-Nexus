@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { Paperclip, Upload, X } from "lucide-react";
 import Badge from "@/components/ui/Badge";
+import { apiFetch } from "@/lib/api-client";
 
 export type MailAttachmentMeta = {
   fileName: string;
@@ -43,7 +44,7 @@ export default function MailAttachmentInput({
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch("/api/v1/mail/attachments/upload", {
+    const response = await apiFetch("/api/v1/mail/attachments/upload", {
       method: "POST",
       credentials: "include",
       body: formData,

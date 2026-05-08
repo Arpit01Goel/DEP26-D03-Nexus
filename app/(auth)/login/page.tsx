@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { OrbitIcon, Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
+import { apiFetch } from "@/lib/api-client";
 import { addBasePath } from "@/lib/base-path";
 
 function GoogleIcon() {
@@ -37,7 +38,7 @@ export default function LoginPage() {
     setApiError(null);
 
     try {
-      const res = await fetch("/api/v1/auth/login", {
+      const res = await apiFetch("/api/v1/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

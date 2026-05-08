@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/cdpc-nexus",
+      "permanent": false
+    }
+  ]
+}

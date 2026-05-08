@@ -10,7 +10,7 @@ const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
 
 function errorRedirect(message: string, base: string) {
-    const url = new URL("/login", base);
+    const url = new URL(addBasePath("/login"), base);
     url.searchParams.set("error", message);
     return NextResponse.redirect(url.toString());
 }
@@ -122,7 +122,7 @@ export async function GET(request: NextRequest) {
     const destination = state.startsWith("/") ? state :
         (user.role === "student" ? "/student/blogs" : "/companies");
 
-    const response = NextResponse.redirect(new URL(destination, baseUrl));
+    const response = NextResponse.redirect(new URL(addBasePath(destination), baseUrl));
     response.cookies.set(COOKIE_NAME, token, {
         httpOnly: true,
         sameSite: "lax",

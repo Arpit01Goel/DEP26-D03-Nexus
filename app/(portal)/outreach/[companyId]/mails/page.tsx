@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, Mail } from "lucide-react";
 import { getCurrentUser } from "@/lib/api/auth";
 import { db } from "@/lib/db";
+import { addBasePath } from "@/lib/base-path";
 import CompanyMailTrackerClient from "./CompanyMailTrackerClient";
 import { ScrollToTop } from "./ScrollToTop";
 
@@ -22,7 +23,7 @@ export default async function CompanyMailTrackerPage({
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(addBasePath("/login"));
   }
 
   const { companyId } = await params;

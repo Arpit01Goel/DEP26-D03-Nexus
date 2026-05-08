@@ -11,6 +11,7 @@ import {
   AlertCircle,
   Mail,
 } from "lucide-react";
+import { apiFetch } from "@/lib/api-client";
 import { addBasePath } from "@/lib/base-path";
 
 const ALLOWED_DOMAIN = "iitrpr.ac.in";
@@ -99,7 +100,7 @@ export default function SignupPage() {
     setApiError(null);
 
     try {
-      const res = await fetch("/api/v1/auth/signup/request-otp", {
+      const res = await apiFetch("/api/v1/auth/signup/request-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: form.email }),
@@ -125,7 +126,7 @@ export default function SignupPage() {
     setApiError(null);
 
     try {
-      const res = await fetch("/api/v1/auth/signup", {
+      const res = await apiFetch("/api/v1/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -30,6 +30,8 @@ import SearchBar from "@/components/ui/SearchBar";
 import FilterSelect from "@/components/ui/FilterSelect";
 import EmptyState from "@/components/ui/EmptyState";
 import ContactModal from "../../../components/companies/ContactModal";
+import { apiFetch } from "@/lib/api-client";
+import { addBasePath } from "@/lib/base-path";
 
 // --- Types -------------------------------------------------------------------
 type CycleStatus =
@@ -210,7 +212,7 @@ function mapCompanyRecord(record: CompanyRecord): Company {
 }
 
 async function requestJson<T>(url: string, init?: RequestInit) {
-  const response = await fetch(url, {
+  const response = await apiFetch(url, {
     credentials: "include",
     ...init,
   });
@@ -227,7 +229,7 @@ async function requestJson<T>(url: string, init?: RequestInit) {
 
   if (!response.ok) {
     if (response.status === 401 && typeof window !== "undefined") {
-      window.location.href = "/login";
+      window.location.href = addBasePath("/login");
     }
     throw new Error(body.error?.message ?? "Request failed");
   }
@@ -792,7 +794,7 @@ export default function CompaniesPage() {
         query.set("industry", industryFilter[0]);
       }
 
-      const response = await fetch(
+      const response = await apiFetch(
         `/api/v1/companies/export${query.size > 0 ? `?${query.toString()}` : ""}`,
         {
           credentials: "include",
@@ -844,7 +846,7 @@ export default function CompaniesPage() {
     setDownloadingImportFormat(true);
 
     try {
-      const response = await fetch("/api/v1/companies/import-template", {
+      const response = await apiFetch("/api/v1/companies/import-template", {
         credentials: "include",
       });
 
@@ -938,7 +940,7 @@ export default function CompaniesPage() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch("/api/v1/companies/import-preview", {
+      const response = await apiFetch("/api/v1/companies/import-preview", {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -997,7 +999,7 @@ export default function CompaniesPage() {
       formData.append("file", fileToImport);
       formData.append("resolvedMatches", JSON.stringify(matchesToImport));
 
-      const response = await fetch("/api/v1/companies/import", {
+      const response = await apiFetch("/api/v1/companies/import", {
         method: "POST",
         credentials: "include",
         body: formData,

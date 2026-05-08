@@ -6,6 +6,7 @@ import FilterSelect from "@/components/ui/FilterSelect";
 import Modal from "@/components/ui/Modal";
 import RichTextEditor from "@/components/ui/RichTextEditor";
 import SearchBar from "@/components/ui/SearchBar";
+import { apiFetch } from "@/lib/api-client";
 import {
   BookOpen,
   AlertCircle,
@@ -265,7 +266,7 @@ export default function BlogsPageClient({
     setActiveBlogId(blogId);
 
     try {
-      const response = await fetch(`/api/v1/blogs/${blogId}/approve`, {
+      const response = await apiFetch(`/api/v1/blogs/${blogId}/approve`, {
         method: "POST",
       });
 
@@ -321,7 +322,7 @@ export default function BlogsPageClient({
     setActiveBlogId(blogId);
 
     try {
-      const response = await fetch(`/api/v1/blogs/${blogId}/reject`, {
+      const response = await apiFetch(`/api/v1/blogs/${blogId}/reject`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -361,7 +362,7 @@ export default function BlogsPageClient({
     setActiveVoteBlogId(blogId);
 
     try {
-      const response = await fetch(`/api/v1/blogs/${blogId}/vote`, {
+      const response = await apiFetch(`/api/v1/blogs/${blogId}/vote`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -416,7 +417,7 @@ export default function BlogsPageClient({
     setActiveDeleteBlogId(blogId);
 
     try {
-      const response = await fetch(`/api/v1/blogs/${blogId}`, {
+      const response = await apiFetch(`/api/v1/blogs/${blogId}`, {
         method: "DELETE",
       });
 
@@ -565,7 +566,7 @@ export default function BlogsPageClient({
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
 
-      const response = await fetch("/api/v1/blogs", {
+      const response = await apiFetch("/api/v1/blogs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

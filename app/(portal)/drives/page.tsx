@@ -21,6 +21,7 @@ import {
 } from "recharts";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
+import { apiFetch } from "@/lib/api-client";
 import DrivesLoadingView from "./DrivesLoadingView";
 
 type SeasonType = "intern" | "placement";
@@ -36,7 +37,7 @@ type SeasonCard = {
 };
 
 async function requestJson<T>(url: string) {
-  const response = await fetch(url, { credentials: "include" });
+  const response = await apiFetch(url, { credentials: "include" });
   const text = await response.text();
   let body: ApiResponse<T> = {};
   if (text) {

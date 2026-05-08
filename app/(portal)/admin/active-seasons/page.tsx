@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/api/auth";
 import { db } from "@/lib/db";
+import { addBasePath } from "@/lib/base-path";
 
 function formatDate(value: Date | null) {
   if (!value) return "Not set";
@@ -15,11 +16,11 @@ export default async function ActiveSeasonsPage() {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(addBasePath("/login"));
   }
 
   if (user.role !== "tpo_admin") {
-    redirect("/unauthorized");
+    redirect(addBasePath("/unauthorized"));
   }
 
   const activeSeasons = await db.recruitmentSeason.findMany({

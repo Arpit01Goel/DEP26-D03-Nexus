@@ -12,6 +12,7 @@ import {
   X,
   ChevronDown,
 } from "lucide-react";
+import { apiFetch } from "@/lib/api-client";
 
 type StudentShellUser = {
   name: string;
@@ -68,7 +69,7 @@ export default function StudentShell({
   const isActive = (href: string) => pathname.startsWith(href);
 
   async function handleSignOut() {
-    await fetch("/api/v1/auth/logout", { method: "POST" });
+    await apiFetch("/api/v1/auth/logout", { method: "POST" });
     router.push("/login");
     router.refresh();
   }
@@ -88,7 +89,7 @@ export default function StudentShell({
 
     setUsernameLoading(true);
     try {
-      const res = await fetch("/api/v1/auth/update-profile", {
+      const res = await apiFetch("/api/v1/auth/update-profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newUsername }),
@@ -140,7 +141,7 @@ export default function StudentShell({
 
     setPasswordLoading(true);
     try {
-      const res = await fetch("/api/v1/auth/change-password", {
+      const res = await apiFetch("/api/v1/auth/change-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
