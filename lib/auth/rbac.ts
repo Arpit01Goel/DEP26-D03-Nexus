@@ -54,7 +54,7 @@ export const APP_ROUTE_POLICIES: RoutePolicy[] = [
     route: "/admin",
     label: "Admin pages",
     rule: {
-      roles: ["tpo_admin", "coordinator"],
+      roles: ["tpo_admin"],
     },
   },
   {
