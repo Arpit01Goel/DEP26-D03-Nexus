@@ -189,26 +189,6 @@ npm run build
 # start server with: node server.js (or pm2 start server.js --name nexus-app)
 ```
 
-Security & production notes:
-
-- Change `SESSION_SECRET` from default to a strong secret.
-- Use secure cookies (HTTPS), set `SameSite` and `Secure` in production.
-- Use a managed Postgres and create separate DB users for migrations vs runtime where possible.
-
-## Contributing & next steps
-
-If you plan to contribute:
-
-1. Fork and create a feature branch.
-2. Run lint and ensure TypeScript checks pass.
-3. Add or update tests (project currently has no test suite).
-
-Recommended improvements:
-- Add unit & integration tests (Jest/Vitest + Supertest)
-- Add CI (GitHub Actions) for lint, typecheck, and test runs
-- Harden authentication (rotate secrets, add refresh tokens if desired)
-- Add more defensive checks around mailing and long-running backfills
-
 ## Useful files & references
 
 - Project manifest: [package.json](package.json)
@@ -219,13 +199,3 @@ Recommended improvements:
 - API specification: [API_SPEC.md](API_SPEC.md)
 - DB docs: [DB_SCHEMA.md](DB_SCHEMA.md)
 - Seed script: [scripts/seed.ts](scripts/seed.ts)
-
----
-
-If you want, I can now:
-
-- run a deeper automated extraction of the `prisma/schema.prisma` and embed model summaries into this README,
-- create a separate `DEVELOPMENT.md` with step-by-step developer onboarding (IDE settings, pre-commit hooks),
-- or add a minimal `docker-compose.yml` to run Postgres + the app for local reproducible development.
-
-Tell me which of the above you'd like next.
